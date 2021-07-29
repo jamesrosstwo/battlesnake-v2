@@ -1,15 +1,10 @@
-# Partially taken from https://www.redblobgames.com/pathfinding/a-star/implementation.html
-
 from typing import List, Tuple, Dict, Optional
-from agent.data_structures import Queue, PriorityQueue
-from agent.environment.cell import BattleSnakeCellType, BattleSnakeCell, cell_symbols
-from agent.environment.coord import BoardCoord
-from agent.environment.snake import BattleSnakeSnake
+from agent.data_structures import PriorityQueue
+from game.cell import BattleSnakeCellType, BattleSnakeCell, cell_symbols
+from game.coord import BoardCoord
+from game.snake import BattleSnakeSnake
 
-i = 0
-
-
-def _get_snakes_from_json(board_json):
+def _get_snakes_from_board_json(board_json):
     snake_json = board_json["board"]["snakes"]
     return [BattleSnakeSnake(x) for x in snake_json]
 
@@ -28,7 +23,7 @@ class BattleSnakeBoard:
 
         self._add_food(board_json)
         self._add_danger(board_json)
-        self.snakes = _get_snakes_from_json(board_json)
+        self.snakes = _get_snakes_from_board_json(board_json)
         self._add_heads(board_json)
         self.num_snakes = len(self.snakes)
 

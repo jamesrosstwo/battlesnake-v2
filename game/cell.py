@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from agent.environment.coord import BoardCoord
+from game.coord import BoardCoord
 
 
 class BattleSnakeCellType(Enum):

@@ -1,5 +1,5 @@
 from agent.actions.action import get_action_to
-from agent.environment.coord import BoardCoord
+from game.coord import BoardCoord
 from agent.singleton import Singleton
 from agent.states.state import BattleSnakeState
 import random

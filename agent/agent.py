@@ -1,8 +1,7 @@
-from agent.environment.board import BattleSnakeBoard, BoardCoord
-from agent.environment.snake import BattleSnakeSnake
+from game.board import BattleSnakeBoard
+from game.snake import BattleSnakeSnake
 from agent.state_machine import BattleSnakeStateMachine
 from agent.actions.action import BattleSnakeAction
-from agent.states.state_food import BattleSnakeFoodState
 from agent.states.state_hunt import BattleSnakeHuntState
 
 
