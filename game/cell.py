@@ -24,3 +24,6 @@ class BattleSnakeCell:
     def get_pos(self):
         return BoardCoord(self.x, self.y)
 
+    def set_type(self, type: BattleSnakeCellType):
+        self.type = type
+

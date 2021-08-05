@@ -22,25 +22,31 @@ class BattleSnakeScraper:
             'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
         }
 
-    def scrape(self, game_id: str) -> BattleSnakeGame:
+    def scrape_game(self, game_id: str, snake_name: str) -> BattleSnakeGame:
 
         print(game_id)
 
         # Metadata
-        response = requests.request("GET", self._base_game_url + game_id, headers=self._req_headers)
-        print(response.text)
+        metadata_resp = requests.request("GET", self._base_game_url + game_id, headers=self._req_headers)
+        metadata = metadata_resp.text
 
 
         # Turn data
         ws = websocket.WebSocket(sslopt={"cert_reqs": ssl.CERT_NONE})
         ws.connect(self._base_socket_url + game_id)
+        turn_jsons = []
         while ws.connected:
             result = ws.recv()
+            if result == "":
+                continue
+            turn_jsons.append(result)
             print("Received '%s'" % result)
         ws.close()
 
+        return BattleSnakeGame.from_json(metadata, turn_jsons, snake_name)
 
-    def scrape_snake(self, snake_url: str, num_games: int = 500) -> List[BattleSnakeGame]:
+
+    def scrape_snake(self, snake_url: str) -> List[BattleSnakeGame]:
         """
         @param snake_url: URL of snake to scrape from. E.G: https://play.battlesnake.com/u/pruzze/pruzze-v2/
         @param num_games: Number of games to scrape from user
@@ -51,10 +57,16 @@ class BattleSnakeScraper:
         req = requests.get(snake_url, self._req_headers)
         soup = BeautifulSoup(req.content, 'html.parser')
         games = []
-        snake_name = soup.find(".")
+        snake_name = ""
+        for tag in soup.find_all("h1"):
+            if "mr-auto" in tag.parent.get("class"):
+                snake_name = tag.text
+                break
 
         for link in soup.findAll('a', attrs={'href': re.compile("/g/.+/")}):
             href = link.get("href")
             game_id = href[3:-1]
-            games.append(self.scrape(game_id))
+            games.append(self.scrape_game(game_id, snake_name))
+
+        return games
 
