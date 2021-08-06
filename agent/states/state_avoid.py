@@ -12,7 +12,7 @@ def try_rand_paths(board, entity):
 
     for coord in shuffled_coords:
         try:
-            try_path = board.get_safe_path(entity.snake.head, coord)
+            try_path = board.get_safe_path(entity.snake.head_pos, coord)
             if len(try_path) == 0:
                 continue
             return try_path
@@ -22,7 +22,7 @@ def try_rand_paths(board, entity):
     if path is None:
         for coord in shuffled_coords:
             try:
-                try_path = board.get_path(entity.snake.head, coord)
+                try_path = board.get_path(entity.snake.head_pos, coord)
                 if len(try_path) == 0:
                     continue
                 return try_path
@@ -42,7 +42,7 @@ class BattleSnakeAvoidState(BattleSnakeState):
 
         path = try_rand_paths(board, entity)
         next_node = BoardCoord(*path[0])
-        d = next_node - entity.snake.head
+        d = next_node - entity.snake.head_pos
         return get_action_to(d)
 
     def exit(self, entity):

@@ -52,9 +52,9 @@ class BattleSnakeBoard:
             if snake.id == board_json["you"]["id"]:
                 continue
             if snake.length + 2 < board_json["you"]["length"]:
-                self._set_cell(snake.head.x, snake.head.y, BattleSnakeCellType.EMPTY)
+                self._set_cell(snake.head_pos.x, snake.head_pos.y, BattleSnakeCellType.EMPTY)
             else:
-                for cell in self._diag_neighbours(snake.head):
+                for cell in self._diag_neighbours(snake.head_pos):
                     self._set_cell(cell.x, cell.y, BattleSnakeCellType.DANGER)
 
     def _is_valid(self, pos: BoardCoord):

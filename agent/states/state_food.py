@@ -9,7 +9,7 @@ from agent.states.state_avoid import BattleSnakeAvoidState
 def try_safe_food_paths(board, entity, food_by_dist):
     for food in food_by_dist:
         try:
-            try_path = board.get_safe_path(entity.snake.head, food)
+            try_path = board.get_safe_path(entity.snake.head_pos, food)
             if len(try_path) == 0:
                 continue
             return try_path
@@ -21,7 +21,7 @@ def try_safe_food_paths(board, entity, food_by_dist):
 def try_food_paths(board, entity, food_by_dist):
     for food in food_by_dist:
         try:
-            try_path = board.get_path(entity.snake.head, food)
+            try_path = board.get_path(entity.snake.head_pos, food)
             if len(try_path) == 0:
                 continue
             return try_path
@@ -37,7 +37,7 @@ class BattleSnakeFoodState(BattleSnakeState):
 
     def execute(self, entity):
         board = entity.board
-        food_by_dist = sorted(board.food, key=lambda x: BattleSnakeBoard.dist(entity.snake.head, x))
+        food_by_dist = sorted(board.food, key=lambda x: BattleSnakeBoard.dist(entity.snake.head_pos, x))
 
         path = try_safe_food_paths(board, entity, food_by_dist)
         if path is None:
@@ -49,7 +49,7 @@ class BattleSnakeFoodState(BattleSnakeState):
             entity.state_machine.change_state(BattleSnakeAvoidState.instance())
             return entity.state_machine.calculate_action()
         next_node = BoardCoord(*path[0])
-        d = next_node - entity.snake.head
+        d = next_node - entity.snake.head_pos
         return get_action_to(d)
 
     def exit(self, entity):

@@ -9,7 +9,7 @@ from agent.states.state_food import BattleSnakeFoodState
 def try_hunt_paths(board, entity, heads_by_dist):
     for head in heads_by_dist:
         try:
-            try_path = board.get_safe_path(entity.snake.head, head)
+            try_path = board.get_safe_path(entity.snake.head_pos, head)
             if len(try_path) == 0:
                 continue
             return try_path
@@ -18,7 +18,7 @@ def try_hunt_paths(board, entity, heads_by_dist):
 
     for head in heads_by_dist:
         try:
-            try_path = board.get_path(entity.snake.head, head)
+            try_path = board.get_path(entity.snake.head_pos, head)
             if len(try_path) == 0:
                 continue
             return try_path
@@ -36,7 +36,7 @@ class BattleSnakeHuntState(BattleSnakeState):
         board = entity.board
 
         smaller_snakes = [x for x in board.snakes if x.length + 2 < entity.snake.length]
-        smaller_snake_heads = [x.head for x in smaller_snakes]
+        smaller_snake_heads = [x.head_pos for x in smaller_snakes]
 
         # Don't chase after smaller snakes if there aren't many of them
         if len(smaller_snakes) < max(1, (board.num_snakes - 1) / 2):
@@ -47,7 +47,7 @@ class BattleSnakeHuntState(BattleSnakeState):
             entity.state_machine.change_state(BattleSnakeFoodState.instance())
             return entity.state_machine.calculate_action()
         next_node = BoardCoord(*path[0])
-        d = next_node - entity.snake.head
+        d = next_node - entity.snake.head_pos
         return get_action_to(d)
 
     def exit(self, entity):

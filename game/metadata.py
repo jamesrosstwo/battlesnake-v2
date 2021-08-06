@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 
-from game.utils import BoundingBox
+from game.utils import BoundingBox, lowercase_keys
 
 """as     "ID": "0fda03b7-080f-4834-b011-937d1bd51f93",
     "Status": "complete",
@@ -23,8 +23,8 @@ class BattleSnakeGameMetadata:
 
     @classmethod
     def from_json(cls, turn_json: str):
-        turn_json = json.loads(turn_json)
-        return cls(int(turn_json["Game"]["Width"]), int(turn_json["Game"]["Height"]), turn_json["Game"]["ID"])
+        turn_json = lowercase_keys(json.loads(turn_json))
+        return cls(int(turn_json["game"]["width"]), int(turn_json["game"]["height"]), turn_json["game"]["id"])
 
     @property
     def bounds(self) -> BoundingBox:

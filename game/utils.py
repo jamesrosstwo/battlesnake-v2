@@ -109,3 +109,13 @@ class BoundingBox:
         out_by = min(self.bottom_right.y, max_box.y)
         return BoundingBox.from_corners(out_ax, out_ay, out_bx, out_by)
 
+
+def lowercase_keys(obj):
+    if isinstance(obj, dict):
+        obj = {key.lower(): value for key, value in obj.items()}
+        for key, value in obj.items():
+            if isinstance(value, list):
+                for idx, item in enumerate(value):
+                    value[idx] = lowercase_keys(item)
+            obj[key] = lowercase_keys(value)
+    return obj
