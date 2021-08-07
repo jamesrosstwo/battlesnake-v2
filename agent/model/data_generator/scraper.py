@@ -31,7 +31,7 @@ class BattleSnakeScraper:
         metadata = metadata_resp.text
 
 
-        # Turn data
+        # Turn data_generator
         ws = websocket.WebSocket(sslopt={"cert_reqs": ssl.CERT_NONE})
         ws.connect(self._base_socket_url + game_id)
         turn_jsons = []

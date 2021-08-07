@@ -4,6 +4,7 @@ from game.cell import BattleSnakeCellType, BattleSnakeCell, cell_symbols
 from game.coord import BoardCoord
 from game.snake import BattleSnakeSnake
 
+
 def _get_snakes_from_board_json(board_json):
     snake_json = board_json["board"]["snakes"]
     return [BattleSnakeSnake(x) for x in snake_json]
@@ -68,7 +69,8 @@ class BattleSnakeBoard:
     def _is_extra_safe(self, pos: BoardCoord):
         if not self._is_safe(pos):
             return False
-        adj_safe = [x for x in self._diag_neighbours(pos) if self.get_cell_from_coord(x).type != BattleSnakeCellType.DANGER]
+        adj_safe = [x for x in self._diag_neighbours(pos) if
+                    self.get_cell_from_coord(x).type != BattleSnakeCellType.DANGER]
         return len(adj_safe) >= 3  # Our previous body segment is danger, so only look for three
 
     def _safe_neighbours(self, pos: BoardCoord) -> List[BoardCoord]:
@@ -79,7 +81,8 @@ class BattleSnakeBoard:
         return [pos + x for x in neighbour_offsets if self._is_valid(pos + x)]
 
     def _diag_neighbours(self, pos: BoardCoord) -> List[BoardCoord]:
-        neighbour_offsets = [BoardCoord(-1, 0), BoardCoord(1, 0), BoardCoord(0, -1), BoardCoord(0, 1), BoardCoord(-1, 1), BoardCoord(1, 1), BoardCoord(-1, -1), BoardCoord(1, -1)]
+        neighbour_offsets = [BoardCoord(-1, 0), BoardCoord(1, 0), BoardCoord(0, -1), BoardCoord(0, 1),
+                             BoardCoord(-1, 1), BoardCoord(1, 1), BoardCoord(-1, -1), BoardCoord(1, -1)]
         return [pos + x for x in neighbour_offsets if self._is_valid(pos + x)]
 
     def _extra_safe_neighbours(self, pos: BoardCoord) -> List[BoardCoord]:
@@ -134,6 +137,12 @@ class BattleSnakeBoard:
         return abs(a.x - b.x) + abs(a.y - b.y)
 
     def print_board(self):
+        cell_symbols = {
+            BattleSnakeCellType.DANGER: "D",
+            BattleSnakeCellType.FOOD: "F",
+            BattleSnakeCellType.EMPTY: "."
+        }
+
         print("BOARD: ")
         out_str = ""
         for row in self.cells:

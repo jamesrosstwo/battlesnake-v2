@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from agent.actions.action import BattleSnakeAction
+from agent.action import BattleSnakeAction
 
 
 

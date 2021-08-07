@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from definitions import TORCH_DEVICE
-from game.cell import BattleSnakeCell, BattleSnakeCellType, CELL_DIMS
+from game.cell import BattleSnakeCell, BattleSnakeCellType
 from game.metadata import BattleSnakeGameMetadata
 from game.snake import BattleSnakeSnake
 from game.utils import Point, lowercase_keys
@@ -17,7 +17,10 @@ def _get_snakes_from_board_json(board_json):
     return [BattleSnakeSnake.from_dict(x) for x in snake_json]
 
 
-class BattleSnakeTurn:
+class BattleSnakeGameState:
+    NUM_CHANNELS = BattleSnakeCell.CELL_DIMS
+
+
     def __init__(self, local_cells: List[List[BattleSnakeCell]], width: int, height: int, turn_num: int,
                  player: BattleSnakeSnake):
         self.local_cells: List[List[BattleSnakeCell]] = local_cells
@@ -57,7 +60,7 @@ class BattleSnakeTurn:
 
     def _to_tensor(self) -> torch.Tensor:
         # Convert BattleSnakeCells to numpy array
-        ndarr: np.ndarray = np.zeros((self._width, self._height, CELL_DIMS))
+        ndarr: np.ndarray = np.zeros((self._width, self._height, BattleSnakeGameState.NUM_CHANNELS))
         for x in range(self._height):
             for y in range(self._width):
                 ndarr[x, y] = self.local_cells[x][y].encode()

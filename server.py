@@ -3,7 +3,7 @@ import random
 
 import cherrypy
 
-from agent.actions.action import BattleSnakeAction
+from agent.action import BattleSnakeAction
 from agent.agent import BattleSnakeAgent
 
 """
@@ -22,7 +22,7 @@ class Battlesnake(object):
         color = random.choice([rbc_gold, rbc_blue])
         # This function is called when you register your Battlesnake on play.battlesnake.com
         # It controls your Battlesnake appearance and author permissions.
-        # TIP: If you open your Battlesnake URL in browser you should see this data
+        # TIP: If you open your Battlesnake URL in browser you should see this data_generator
         return {
             "apiversion": "1",
             "author": "",  # TODO: Your Battlesnake Username

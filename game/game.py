@@ -3,23 +3,23 @@ A collection of battlesnake board states that make up a game
 """
 from typing import List
 
-from agent.actions.action import BattleSnakeAction
-from agent.model.transition import BattleSnakeTransition
+from agent.action import BattleSnakeAction
+from agent.model.data_generator.transition import BattleSnakeTransition
 from game.metadata import BattleSnakeGameMetadata
-from game.turn import BattleSnakeTurn
+from game.state import BattleSnakeGameState
 
 
 class BattleSnakeGame:
-    def __init__(self, metadata: BattleSnakeGameMetadata, states: List[BattleSnakeTurn]):
+    def __init__(self, metadata: BattleSnakeGameMetadata, states: List[BattleSnakeGameState]):
         self.metadata = metadata
-        self.states = states
+        self.states: List[BattleSnakeGameState] = states
         self.transitions = self._create_transitions()
 
     @classmethod
     def from_json(cls, metadata_json: str, turns_json: List[str], snake_name: str):
         metadata = BattleSnakeGameMetadata.from_json(metadata_json)
-        turns = [BattleSnakeTurn.from_json(metadata, turn, snake_name) for turn in turns_json]
-        return cls(metadata, turns)
+        states = [BattleSnakeGameState.from_json(metadata, turn, snake_name) for turn in turns_json]
+        return cls(metadata, states)
 
     def _create_transitions(self) -> List[BattleSnakeTransition]:
         out_transitions: List[BattleSnakeTransition] = []

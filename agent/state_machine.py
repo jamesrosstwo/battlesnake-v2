@@ -1,4 +1,4 @@
-from agent.actions.action import BattleSnakeAction
+from agent.action import BattleSnakeAction
 from agent.states.state_food import BattleSnakeFoodState
 
 

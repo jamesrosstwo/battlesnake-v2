@@ -11,16 +11,9 @@ class BattleSnakeCellType(IntEnum):
     DANGER = 2
 
 
-cell_symbols = {
-    BattleSnakeCellType.DANGER: "D",
-    BattleSnakeCellType.FOOD: "F",
-    BattleSnakeCellType.EMPTY: "."
-}
-
-CELL_DIMS = len(cell_symbols)
-
-
 class BattleSnakeCell:
+    CELL_DIMS = len(BattleSnakeCellType)
+
     def __init__(self, x, y, type: BattleSnakeCellType):
         self.x = x
         self.y = y
@@ -35,6 +28,6 @@ class BattleSnakeCell:
     """One hot encoded cells"""
 
     def encode(self) -> np.array:
-        vec = np.zeros(CELL_DIMS)
+        vec = np.zeros(BattleSnakeCell.CELL_DIMS)
         vec[int(self.type)] = 1
         return vec
