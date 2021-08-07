@@ -3,17 +3,6 @@ from dataclasses import dataclass
 
 from game.utils import BoundingBox, lowercase_keys
 
-"""as     "ID": "0fda03b7-080f-4834-b011-937d1bd51f93",
-    "Status": "complete",
-    "Width": 11,
-    "Height": 11,
-    "Ruleset": {
-      "foodSpawnChance": "15",
-      "minimumFood": "1",
-      "name": "standard"
-    },
-    "SnakeTimeout": 500"""
-
 @dataclass
 class BattleSnakeGameMetadata:
     def __init__(self, width: int, height: int, id: str):

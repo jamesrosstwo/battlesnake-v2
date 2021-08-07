@@ -1,13 +1,16 @@
-from enum import Enum, auto
+from enum import Enum, auto, IntEnum
 
+import torch
+
+from definitions import TORCH_DEVICE
 from game.turn import BattleSnakeTurn
 
 
-class BattleSnakeAction(Enum):
-    UP = auto()
-    DOWN = auto()
-    LEFT = auto()
-    RIGHT = auto()
+class BattleSnakeAction(IntEnum):
+    UP = 0
+    DOWN = 1
+    LEFT = 2
+    RIGHT = 3
 
     @staticmethod
     def parse_action(action) -> str:
@@ -20,13 +23,20 @@ class BattleSnakeAction(Enum):
         diff = next_pos - prev_pos
         if diff.y > 0:
             return BattleSnakeAction.UP
-        if diff.y < 0:
+        elif diff.y < 0:
             return BattleSnakeAction.DOWN
-        if diff.x > 0:
+        elif diff.x > 0:
             return BattleSnakeAction.RIGHT
-        if diff.x < 0:
+        elif diff.x < 0:
             return BattleSnakeAction.LEFT
+        else:
+            return BattleSnakeAction.UP
 
+
+    def to_tensor(self) -> torch.Tensor:
+        action_vals = [0, 0, 0, 0]
+        action_vals[int(self)] = 1
+        return torch.tensor(action_vals, dtype=torch.float32, device=TORCH_DEVICE)
 
 def get_action_to(d):
     if d.x > 0:

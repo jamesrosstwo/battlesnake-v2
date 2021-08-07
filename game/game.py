@@ -30,6 +30,6 @@ class BattleSnakeGame:
             out_transitions.append(BattleSnakeTransition(
                 prev_state.tensor,
                 next_state.tensor,
-                action
+                action.to_tensor()
             ))
         return out_transitions

@@ -3,7 +3,7 @@ import ssl
 from typing import List
 
 import requests
-from bs4 import BeautifulSoup, SoupStrainer
+from bs4 import BeautifulSoup
 
 from game.game import BattleSnakeGame
 import websocket
@@ -50,9 +50,6 @@ class BattleSnakeScraper:
         @param snake_url: URL of snake to scrape from. E.G: https://play.battlesnake.com/u/pruzze/pruzze-v2/
         @param num_games: Number of games to scrape from user
         """
-
-
-
         req = requests.get(snake_url, self._req_headers)
         soup = BeautifulSoup(req.content, 'html.parser')
         games = []
@@ -62,10 +59,16 @@ class BattleSnakeScraper:
                 snake_name = tag.text
                 break
 
+        seen_ids = set()
         for link in soup.findAll('a', attrs={'href': re.compile("/g/.+/")}):
             href = link.get("href")
             game_id = href[3:-1]
+            if game_id in seen_ids:
+                continue
+            seen_ids.add(game_id)
             games.append(self.scrape_game(game_id, snake_name))
+
+        print("Scraped", len(games), "games")
 
         return games
 

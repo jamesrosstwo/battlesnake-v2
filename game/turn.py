@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 import torch
 
+from definitions import TORCH_DEVICE
 from game.cell import BattleSnakeCell, BattleSnakeCellType, CELL_DIMS
 from game.metadata import BattleSnakeGameMetadata
 from game.snake import BattleSnakeSnake
@@ -17,16 +18,19 @@ def _get_snakes_from_board_json(board_json):
 
 
 class BattleSnakeTurn:
-    def __init__(self, local_cells: List[List[BattleSnakeCell]], width: int, height: int, player: BattleSnakeSnake):
+    def __init__(self, local_cells: List[List[BattleSnakeCell]], width: int, height: int, turn_num: int,
+                 player: BattleSnakeSnake):
         self.local_cells: List[List[BattleSnakeCell]] = local_cells
         self._width = width
         self._height = height
+        self.turn_num = turn_num
         self.our_snake: BattleSnakeSnake = player
         self.tensor: torch.Tensor = self._to_tensor()
 
     @classmethod
     def from_json(cls, metadata: BattleSnakeGameMetadata, turn_json: str, snake_name: str):
         turn_json = lowercase_keys(json.loads(turn_json))
+        turn_num = int(turn_json["turn"])
 
         cells = \
             [
@@ -49,7 +53,7 @@ class BattleSnakeTurn:
                     break
                 cells[seg_x][seg_y].set_type(BattleSnakeCellType.DANGER)
 
-        return cls(cells, metadata.width, metadata.height, our_snake)
+        return cls(cells, metadata.width, metadata.height, turn_num, our_snake)
 
     def _to_tensor(self) -> torch.Tensor:
         # Convert BattleSnakeCells to numpy array
@@ -62,4 +66,4 @@ class BattleSnakeTurn:
         board_center = (math.ceil(self._width / 2), math.ceil(self._height / 2))
         center_shift = (self.our_snake.head_pos.x - board_center[0], self.our_snake.head_pos.y - board_center[1])
         centered_input = np.roll(ndarr, center_shift, (0, 1))
-        return torch.from_numpy(centered_input)
+        return torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
