@@ -1,5 +1,6 @@
 *.DS_Store
 *.pyc
 .cmd
-.idea
+.idea/
 .vscode
+data/
