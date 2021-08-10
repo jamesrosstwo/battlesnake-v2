@@ -14,8 +14,10 @@ def _save_path_from_name(filename):
 
 @dataclass
 class BattleSnakeDataset:
-    metadata: BattleSnakeGameMetadata
+    width: int
+    height: int
     transitions: List[BattleSnakeTransition]
+    game_ids: List[str]
 
 
     def save(self, filename):
@@ -31,8 +33,11 @@ class BattleSnakeDataset:
     def from_games(cls, games: List[BattleSnakeGame]):
         assert(len(games) > 0)
         out_transitions: List[BattleSnakeTransition] = games[0].transitions
-        metadata = games[0].metadata
+        width = games[0].metadata.width
+        height = games[0].metadata.height
+        game_ids = [x.metadata.id for x in games]
         for game in games[1:]:
             out_transitions.extend(game.transitions)
-            assert(game.metadata == metadata)
-        return cls(metadata, out_transitions)
+            assert(game.metadata.width == width)
+            assert(game.metadata.height == height)
+        return cls(width, height, out_transitions, game_ids)

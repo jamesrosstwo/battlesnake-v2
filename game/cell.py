@@ -12,7 +12,7 @@ class BattleSnakeCellType(IntEnum):
 
 
 class BattleSnakeCell:
-    CELL_DIMS = len(BattleSnakeCellType)
+    CELL_DIMS = len(BattleSnakeCellType) - 1
 
     def __init__(self, x, y, type: BattleSnakeCellType):
         self.x = x
@@ -29,5 +29,7 @@ class BattleSnakeCell:
 
     def encode(self) -> np.array:
         vec = np.zeros(BattleSnakeCell.CELL_DIMS)
-        vec[int(self.type)] = 1
+        int_t = int(self.type)
+        if int_t > 0:
+            vec[int(self.type) - 1] = 1
         return vec

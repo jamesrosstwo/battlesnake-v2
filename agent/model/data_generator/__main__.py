@@ -15,3 +15,5 @@ def scrape_pruzze():
     file_name = time.strftime("%Y%m%d_%H%M%S") + "_battlesnake_train_size_" + str(len(dataset.transitions))
 
     dataset.save(file_name)
+
+scrape_pruzze()

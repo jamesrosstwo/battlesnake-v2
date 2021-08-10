@@ -5,14 +5,15 @@ from game.utils import BoundingBox, lowercase_keys
 
 @dataclass
 class BattleSnakeGameMetadata:
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, id: str):
         self.width: int = width
         self.height: int = height
+        self.id: str = id
 
     @classmethod
     def from_json(cls, turn_json: str):
         turn_json = lowercase_keys(json.loads(turn_json))
-        return cls(int(turn_json["game"]["width"]), int(turn_json["game"]["height"]))
+        return cls(int(turn_json["game"]["width"]), int(turn_json["game"]["height"]), turn_json["game"]["id"])
 
     @property
     def bounds(self) -> BoundingBox:
