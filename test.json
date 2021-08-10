@@ -1,78 +1,80 @@
 {
-  "Turn": 0,
-  "Snakes": [
-    {
-      "ID": "gs_j37hWrVYP944SWb8BJ69V8mb",
-      "Name": "Prüzze v2",
-      "URL": "",
-      "Body": [
-        {
-          "X": 1,
-          "Y": 1
-        },
-        {
-          "X": 1,
-          "Y": 1
-        },
-        {
-          "X": 1,
-          "Y": 1
-        }
-      ],
-      "Health": 100,
-      "Death": null,
-      "Color": "#C91F37",
-      "HeadType": "shac-gamer",
-      "TailType": "shac-coffee",
-      "Latency": "",
-      "Shout": "",
-      "Squad": "",
-      "APIVersion": "",
-      "Author": "pruzze"
+  'game': {
+    'id': 'de94a187-f7a3-4248-95c7-f2f0e1cc7f2b',
+    'ruleset': {
+      'name': 'solo',
+      'version': 'v1.0.17'
     },
-    {
-      "ID": "gs_SpVgbCQY3dG6gBtr6fPMq8FT",
-      "Name": "Pretzel",
-      "URL": "",
-      "Body": [
-        {
-          "X": 1,
-          "Y": 5
+    'timeout': 500
+  },
+  'turn': 1,
+  'board': {
+    'height': 11,
+    'width': 11,
+    'snakes': [
+      {
+        'id': 'gs_rbctc8VPmQCt9RptCXhBv9hV',
+        'name': 'DOSnake',
+        'latency': '47',
+        'health': 99,
+        'body': [
+          {
+            'x': 9,
+            'y': 10
+          },
+          {
+            'x': 9,
+            'y': 9
+          },
+          {
+            'x': 9,
+            'y': 9
+          }
+        ],
+        'head': {
+          'x': 9,
+          'y': 10
         },
-        {
-          "X": 1,
-          "Y": 5
-        },
-        {
-          "X": 1,
-          "Y": 5
-        }
-      ],
-      "Health": 100,
-      "Death": null,
-      "Color": "#000000",
-      "HeadType": "pixel",
-      "TailType": "pixel",
-      "Latency": "",
-      "Shout": "",
-      "Squad": "",
-      "APIVersion": "",
-      "Author": "AlexanderEkdahl"
-    }
-  ],
-  "Food": [
-    {
-      "X": 0,
-      "Y": 2
+        'length': 3,
+        'shout': ''
+      }
+    ],
+    'food': [
+      {
+        'x': 8,
+        'y': 8
+      },
+      {
+        'x': 5,
+        'y': 5
+      }
+    ],
+    'hazards': []
+  },
+  'you': {
+    'id': 'gs_rbctc8VPmQCt9RptCXhBv9hV',
+    'name': 'DOSnake',
+    'latency': '47',
+    'health': 99,
+    'body': [
+      {
+        'x': 9,
+        'y': 10
+      },
+      {
+        'x': 9,
+        'y': 9
+      },
+      {
+        'x': 9,
+        'y': 9
+      }
+    ],
+    'head': {
+      'x': 9,
+      'y': 10
     },
-    {
-      "X": 0,
-      "Y": 6
-    },
-    {
-      "X": 5,
-      "Y": 5
-    }
-  ],
-  "Hazards": []
+    'length': 3,
+    'shout': ''
+  }
 }

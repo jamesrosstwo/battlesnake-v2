@@ -33,7 +33,12 @@ class BattleSnakeGameState:
     @classmethod
     def from_json(cls, metadata: BattleSnakeGameMetadata, turn_json: str, snake_name: str):
         turn_json = lowercase_keys(json.loads(turn_json))
-        turn_num = int(turn_json["turn"])
+        return cls.from_dict(metadata, turn_json, snake_name)
+
+
+    @classmethod
+    def from_dict(cls, metadata: BattleSnakeGameMetadata, turn_dict: dict, snake_name: str):
+        turn_num = int(turn_dict["turn"])
 
         cells = \
             [
@@ -41,12 +46,12 @@ class BattleSnakeGameState:
                 for x in range(metadata.width)
             ]
 
-        for food in turn_json["food"]:
+        for food in turn_dict["food"]:
             cells[int(food["x"])][int(food["y"])].set_type(BattleSnakeCellType.FOOD)
 
         our_snake = None
 
-        for snake in turn_json["snakes"]:
+        for snake in turn_dict["snakes"]:
             if snake["name"] == snake_name:
                 our_snake = BattleSnakeSnake.from_dict(snake)
             for body_seg in snake["body"]:

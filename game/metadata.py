@@ -13,7 +13,15 @@ class BattleSnakeGameMetadata:
     @classmethod
     def from_json(cls, turn_json: str):
         turn_json = lowercase_keys(json.loads(turn_json))
-        return cls(int(turn_json["game"]["width"]), int(turn_json["game"]["height"]), turn_json["game"]["id"])
+        return cls.from_dict(turn_json)
+
+    @classmethod
+    def from_dict(cls, turn_dict: dict):
+        return cls(int(turn_dict["game"]["width"]), int(turn_dict["game"]["height"]), turn_dict["game"]["id"])
+
+    @classmethod
+    def from_game_board(cls, game_dict: dict):
+        return cls(int(game_dict["board"]["width"]), int(game_dict["board"]["height"]), game_dict["game"]["id"])
 
     @property
     def bounds(self) -> BoundingBox:

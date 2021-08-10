@@ -10,9 +10,14 @@ class BattleSnakeAgent:
         self.snake = None
 
     def act(self, board_json) -> "BattleSnakeAction":
+        print(board_json)
         self.snake = BattleSnakeSnake.from_dict(board_json["you"])
-        metadata = BattleSnakeGameMetadata.from_json(board_json)
-        game_state = BattleSnakeGameState.from_json(metadata, board_json, self.snake.name)
+        metadata = BattleSnakeGameMetadata.from_game_board(board_json)
+
+        parsed_board_json = board_json["board"]
+        parsed_board_json["turn"] = board_json["turn"]
+
+        game_state = BattleSnakeGameState.from_dict(metadata, parsed_board_json, self.snake.name)
         return BattleSnakeAction.RIGHT
 
 
