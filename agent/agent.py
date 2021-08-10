@@ -1,7 +1,6 @@
 from game.board import BattleSnakeBoard
 from game.metadata import BattleSnakeGameMetadata
 from game.snake import BattleSnakeSnake
-from agent.state_machine import BattleSnakeStateMachine
 from agent.action import BattleSnakeAction
 from game.state import BattleSnakeGameState
 
