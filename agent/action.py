@@ -1,6 +1,8 @@
 from enum import IntEnum
 
 import torch
+import torch.nn.functional as F
+from torchvision import transforms
 
 from definitions import TORCH_DEVICE
 from game.state import BattleSnakeGameState
@@ -42,7 +44,8 @@ class BattleSnakeAction(IntEnum):
     def to_tensor(self) -> torch.Tensor:
         action_vals = [0 for _ in range(len(BattleSnakeAction))]
         action_vals[int(self)] = 1
-        return torch.tensor(action_vals, dtype=torch.float32, device=TORCH_DEVICE)
+        tensor = torch.tensor(action_vals, dtype=torch.float32, device=TORCH_DEVICE)
+        return tensor
 
     @staticmethod
     def from_tensor(tensor):

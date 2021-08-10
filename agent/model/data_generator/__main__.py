@@ -12,7 +12,7 @@ def scrape_pruzze():
 
     dataset = BattleSnakeDataset.from_games(pruzze_games)
 
-    file_name = time.strftime("%Y%m%d_%H%M%S") + "_battlesnake_train_size_" + str(len(dataset.transitions))
+    file_name = time.strftime("%Y%m%d_%H%M%S") + "_pruzze_train_size_" + str(len(dataset.transitions))
 
     dataset.save(file_name)
 

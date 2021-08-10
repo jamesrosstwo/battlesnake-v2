@@ -1,9 +1,10 @@
 import json
-import math
 from typing import List
 
 import numpy as np
+import matplotlib.pyplot as plt
 import torch
+from torchvision import transforms
 
 from definitions import TORCH_DEVICE
 from game.cell import BattleSnakeCell, BattleSnakeCellType
@@ -17,9 +18,15 @@ def _get_snakes_from_board_json(board_json):
     return [BattleSnakeSnake.from_dict(x) for x in snake_json]
 
 
+def _display_state_tensor(x):
+    img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:]))), 0).numpy()
+    img_vals = np.moveaxis(img_vals, 0, 2)
+    plt.imshow(img_vals)
+    plt.show()
+
+
 class BattleSnakeGameState:
     NUM_CHANNELS = BattleSnakeCell.CELL_DIMS
-
 
     def __init__(self, local_cells: List[List[BattleSnakeCell]], width: int, height: int, turn_num: int,
                  player: BattleSnakeSnake):
@@ -34,7 +41,6 @@ class BattleSnakeGameState:
     def from_json(cls, metadata: BattleSnakeGameMetadata, turn_json: str, snake_name: str):
         turn_json = lowercase_keys(json.loads(turn_json))
         return cls.from_dict(metadata, turn_json, snake_name)
-
 
     @classmethod
     def from_dict(cls, metadata: BattleSnakeGameMetadata, turn_dict: dict, snake_name: str):
@@ -71,7 +77,9 @@ class BattleSnakeGameState:
                 ndarr[:, x, y] = self.local_cells[x][y].encode()
 
         # Center view around player
-        board_center = (math.ceil(self._width / 2), math.ceil(self._height / 2))
-        center_shift = (self.our_snake.head_pos.x - board_center[0], self.our_snake.head_pos.y - board_center[1])
+        board_center = (self._width // 2, self._height // 2)
+        center_shift = (board_center[0] - self.our_snake.head_pos.x, board_center[1] - self.our_snake.head_pos.y)
         centered_input = np.roll(ndarr, center_shift, (1, 2))
-        return torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
+        tensor = torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
+        normalization_tuple = tuple(0.5 for _ in range(BattleSnakeGameState.NUM_CHANNELS))
+        return transforms.Normalize(normalization_tuple, normalization_tuple)(tensor)
