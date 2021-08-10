@@ -1,8 +1,9 @@
 from game.board import BattleSnakeBoard
+from game.metadata import BattleSnakeGameMetadata
 from game.snake import BattleSnakeSnake
 from agent.state_machine import BattleSnakeStateMachine
 from agent.action import BattleSnakeAction
-from agent.states.state_hunt import BattleSnakeHuntState
+from game.state import BattleSnakeGameState
 
 
 class BattleSnakeAgent:
@@ -11,16 +12,10 @@ class BattleSnakeAgent:
         self.board = None
         self.snake = None
 
-    def select_state(self, board) -> "BattleSnakeState":
-        pass
-
-    def parse_board(self, board):
-        pass
-
     def act(self, board_json) -> "BattleSnakeAction":
-        self.board = BattleSnakeBoard(board_json)
-        self.snake = BattleSnakeSnake(board_json["you"])
-        self.state_machine.change_state(BattleSnakeHuntState.instance())
-        return self.state_machine.calculate_action()
+        self.snake = BattleSnakeSnake.from_dict(board_json["you"])
+        metadata = BattleSnakeGameMetadata.from_json(board_json)
+        game_state = BattleSnakeGameState.from_json(metadata, board_json, self.snake.name)
+        return BattleSnakeAction.RIGHT
 
-from agent.states.state import BattleSnakeState
+

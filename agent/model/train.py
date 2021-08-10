@@ -9,11 +9,11 @@ import torch.nn as nn
 from definitions import TORCH_DEVICE
 
 if __name__ == "__main__":
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210809_234205_battlesnake_train_size_5640")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210810_101122_battlesnake_train_size_6135")
 
-    batch_size = 1
+    batch_size = 4
     num_epochs = 2
-    conv_net = BattleSnakeConvNet(dataset.metadata).to(TORCH_DEVICE)
+    conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
 
     train_test_split = 0.7
     train_test_idx = int(len(dataset.transitions) * train_test_split)
@@ -21,8 +21,8 @@ if __name__ == "__main__":
     train = dataset.transitions[:train_test_idx]
     test = dataset.transitions[train_test_idx:]
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(conv_net.parameters(), lr=0.03)
+    criterion = nn.BCEWithLogitsLoss()
+    optimizer = optim.SGD(conv_net.parameters(), lr=0.03, momentum=0.9)
 
     for epoch in range(num_epochs):
         print("Epoch", epoch)
@@ -32,14 +32,14 @@ if __name__ == "__main__":
             batch_data = [list(train[j])[1:] for j in range(i, i + batch_size)]
             x, y = zip(*batch_data)
             x = torch.stack(x, dim=0)
-            y = torch.stack(y, dim=0)
+            y = torch.stack(y, dim=0).float()
             y_class_idx = torch.max(y, 1)[1]
             # zero the parameter gradients
             optimizer.zero_grad()
 
             # forward + backward + optimize
             outputs = conv_net(x)
-            loss = criterion(outputs, y_class_idx)
+            loss = criterion(outputs, y)
             loss.backward()
             optimizer.step()
             # print statistics

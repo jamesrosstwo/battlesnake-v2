@@ -1,7 +1,6 @@
 import torch
 
 from agent.action import BattleSnakeAction
-from game.metadata import BattleSnakeGameMetadata
 from game.state import BattleSnakeGameState
 
 import torch.nn as nn
@@ -9,14 +8,14 @@ import torch.nn.functional as F
 
 
 class BattleSnakeConvNet(nn.Module):
-    def __init__(self, metadata: BattleSnakeGameMetadata):
+    def __init__(self):
         state_n_cs = BattleSnakeGameState.NUM_CHANNELS
 
         super().__init__()
         self.conv1 = nn.Conv2d(in_channels=state_n_cs, out_channels=state_n_cs * 2, kernel_size=(3, 3))
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(in_channels=state_n_cs * 2, out_channels=state_n_cs * 4, kernel_size=(2, 2))
-        self.fc1 = nn.Linear(12, 120)
+        self.fc1 = nn.Linear(8, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, len(BattleSnakeAction))
 
