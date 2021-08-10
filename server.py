@@ -5,6 +5,7 @@ import cherrypy
 
 from agent.action import BattleSnakeAction
 from agent.agent import BattleSnakeAgent
+from agent.model.model import BattleSnakeConvNet
 
 """
 This is a simple Battlesnake server written in Python.
@@ -12,7 +13,11 @@ For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python
 """
 
 
-class Battlesnake(object):
+class Battlesnake:
+
+    def __init__(self):
+        self.conv_net = BattleSnakeConvNet()
+
     @cherrypy.expose
     @cherrypy.tools.json_out()
 
@@ -49,7 +54,7 @@ class Battlesnake(object):
         # Valid moves are "up", "down", "left", or "right".
         # TODO: Use the information in cherrypy.request.json to decide your next move.
         data = cherrypy.request.json
-        agent = BattleSnakeAgent()
+        agent = BattleSnakeAgent(self.conv_net)
         selected_action = agent.act(data)
         selected_move = BattleSnakeAction.parse_action(selected_action)
 
