@@ -1,9 +1,50 @@
+import torch
+from tqdm import tqdm
+
 from agent.model.data_generator.dataset import BattleSnakeDataset
 from agent.model.model import BattleSnakeConvNet
+import torch.optim as optim
+import torch.nn as nn
+
+from definitions import TORCH_DEVICE
 
 if __name__ == "__main__":
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210807_184653_battlesnake_train_size_6202")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210809_234205_battlesnake_train_size_5640")
 
-    batch_size = 4
-    net = BattleSnakeConvNet(dataset.metadata)
-    print(net)
+    batch_size = 1
+    num_epochs = 2
+    conv_net = BattleSnakeConvNet(dataset.metadata).to(TORCH_DEVICE)
+
+    train_test_split = 0.7
+    train_test_idx = int(len(dataset.transitions) * train_test_split)
+
+    train = dataset.transitions[:train_test_idx]
+    test = dataset.transitions[train_test_idx:]
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(conv_net.parameters(), lr=0.03)
+
+    for epoch in range(num_epochs):
+        print("Epoch", epoch)
+        running_loss = 0.0
+        # Iterate through data points while ensuring we don't access out of bounds
+        for i in tqdm(range(len(train))[::batch_size][:-1]):
+            batch_data = [list(train[j])[1:] for j in range(i, i + batch_size)]
+            x, y = zip(*batch_data)
+            x = torch.stack(x, dim=0)
+            y = torch.stack(y, dim=0)
+            y_class_idx = torch.max(y, 1)[1]
+            # zero the parameter gradients
+            optimizer.zero_grad()
+
+            # forward + backward + optimize
+            outputs = conv_net(x)
+            loss = criterion(outputs, y_class_idx)
+            loss.backward()
+            optimizer.step()
+            # print statistics
+            running_loss += loss.item()
+            if i % (100 // batch_size) == 0 and i > 0:  # print every 2000 mini-batches
+                print('[%d, %5d] loss: %.3f' %
+                      (epoch + 1, i + 1, running_loss / 2000))
+                running_loss = 0.0

@@ -30,7 +30,7 @@ class BattleSnakeDataset:
     @classmethod
     def from_games(cls, games: List[BattleSnakeGame]):
         assert(len(games) > 0)
-        out_transitions: List[BattleSnakeTransition] = [games[0].transitions]
+        out_transitions: List[BattleSnakeTransition] = games[0].transitions
         metadata = games[0].metadata
         for game in games[1:]:
             out_transitions.extend(game.transitions)

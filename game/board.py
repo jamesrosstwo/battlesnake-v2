@@ -1,6 +1,6 @@
 from typing import List, Tuple, Dict, Optional
 from agent.data_structures import PriorityQueue
-from game.cell import BattleSnakeCellType, BattleSnakeCell, cell_symbols
+from game.cell import BattleSnakeCellType, BattleSnakeCell
 from game.coord import BoardCoord
 from game.snake import BattleSnakeSnake
 

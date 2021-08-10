@@ -60,13 +60,13 @@ class BattleSnakeGameState:
 
     def _to_tensor(self) -> torch.Tensor:
         # Convert BattleSnakeCells to numpy array
-        ndarr: np.ndarray = np.zeros((self._width, self._height, BattleSnakeGameState.NUM_CHANNELS))
+        ndarr: np.ndarray = np.zeros((BattleSnakeGameState.NUM_CHANNELS, self._width, self._height))
         for x in range(self._height):
             for y in range(self._width):
-                ndarr[x, y] = self.local_cells[x][y].encode()
+                ndarr[:, x, y] = self.local_cells[x][y].encode()
 
         # Center view around player
         board_center = (math.ceil(self._width / 2), math.ceil(self._height / 2))
         center_shift = (self.our_snake.head_pos.x - board_center[0], self.our_snake.head_pos.y - board_center[1])
-        centered_input = np.roll(ndarr, center_shift, (0, 1))
+        centered_input = np.roll(ndarr, center_shift, (1, 2))
         return torch.from_numpy(centered_input).float().to(TORCH_DEVICE)

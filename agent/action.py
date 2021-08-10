@@ -42,7 +42,7 @@ class BattleSnakeAction(IntEnum):
     def to_tensor(self) -> torch.Tensor:
         action_vals = [0 for _ in range(len(BattleSnakeAction))]
         action_vals[int(self)] = 1
-        return torch.tensor(action_vals, dtype=torch.float32, device=TORCH_DEVICE)
+        return torch.tensor(action_vals, dtype=torch.long, device=TORCH_DEVICE)
 
 
 def get_action_to(d):
