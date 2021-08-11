@@ -70,16 +70,27 @@ class BattleSnakeGameState:
         return cls(cells, metadata.width, metadata.height, turn_num, our_snake)
 
     def _to_tensor(self) -> torch.Tensor:
+
+        t_w = self._width * 2 - 1
+        t_h = self._height * 2 - 1
         # Convert BattleSnakeCells to numpy array
-        ndarr: np.ndarray = np.zeros((BattleSnakeGameState.NUM_CHANNELS, self._width, self._height))
+        ndarr: np.ndarray = np.zeros((BattleSnakeGameState.NUM_CHANNELS, t_w, t_h))
+
+
+        # Fill with danger to get board bounds
+        for x in range(t_w):
+            for y in range(t_h):
+                ndarr[:, x, y] = BattleSnakeCell(x, y, BattleSnakeCellType.DANGER).encode()
         for x in range(self._height):
             for y in range(self._width):
                 ndarr[:, x, y] = self.local_cells[x][y].encode()
 
         # Center view around player
-        board_center = (self._width // 2, self._height // 2)
+        board_center = (t_w // 2, t_h // 2)
         center_shift = (board_center[0] - self.our_snake.head_pos.x, board_center[1] - self.our_snake.head_pos.y)
+        # _display_state_tensor(torch.from_numpy(ndarr).float())
         centered_input = np.roll(ndarr, center_shift, (1, 2))
         tensor = torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
+        # _display_state_tensor(tensor)
         normalization_tuple = tuple(0.5 for _ in range(BattleSnakeGameState.NUM_CHANNELS))
         return transforms.Normalize(normalization_tuple, normalization_tuple)(tensor)

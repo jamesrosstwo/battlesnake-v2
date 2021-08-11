@@ -39,7 +39,7 @@ class BattleSnakeAction(IntEnum):
         elif diff.x < 0:
             return BattleSnakeAction.LEFT
         else:
-            return BattleSnakeAction.UP
+            return None
 
     def to_tensor(self) -> torch.Tensor:
         action_vals = [0 for _ in range(len(BattleSnakeAction))]

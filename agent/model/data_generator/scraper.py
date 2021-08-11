@@ -69,6 +69,9 @@ class BattleSnakeScraper:
             games.append(self.scrape_game(game_id, snake_name))
 
         print("Scraped", len(games), "games")
+        counts = [x.action_counts for x in games]
+        counts = [sum(x) for x in list(zip(*counts))]
+        print("Action counts: " + str(counts))
 
         return games
 

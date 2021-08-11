@@ -6,6 +6,7 @@ import cherrypy
 from agent.action import BattleSnakeAction
 from agent.agent import BattleSnakeAgent
 from agent.model.model import BattleSnakeConvNet
+from definitions import ROOT_PATH
 
 """
 This is a simple Battlesnake server written in Python.
@@ -17,6 +18,7 @@ class Battlesnake:
 
     def __init__(self):
         self.conv_net = BattleSnakeConvNet()
+        # self.conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
