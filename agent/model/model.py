@@ -50,7 +50,7 @@ class BattleSnakeConvNet(nn.Module):
             running_loss = 0.0
             # Iterate through data points while ensuring we don't access out of bounds
             for i in tqdm(range(len(transitions))[::batch_size][:-1]):
-                batch_data = [list(transitions[j])[1:-1] for j in range(i, i + batch_size)]
+                batch_data = [[transitions[j].prev_state, transitions[j].action] for j in range(i, i + batch_size)]
                 x, y = zip(*batch_data)
                 x = torch.stack(x, dim=0).to(TORCH_DEVICE).float()
                 y = torch.stack(y, dim=0).to(TORCH_DEVICE).float()
@@ -93,7 +93,7 @@ class BattleSnakeConvNet(nn.Module):
         test = transitions
         correct_count, all_count = 0, 0
         for i in tqdm(range(len(test))[::batch_size][:-1]):
-            batch_data = [list(transitions[j])[1:-1] for j in range(i, i + batch_size)]
+            batch_data = [[transitions[j].prev_state, transitions[j].action] for j in range(i, i + batch_size)]
             x, y = zip(*batch_data)
             x = torch.stack(x, dim=0).to(TORCH_DEVICE).float()
             y = torch.stack(y, dim=0).to(TORCH_DEVICE).float()
