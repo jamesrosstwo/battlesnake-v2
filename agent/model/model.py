@@ -35,7 +35,7 @@ class BattleSnakeConvNet(nn.Module):
         return x
 
     def load_model(self, model_path: Path):
-        self.load_state_dict(torch.load(str(model_path)))
+        self.load_state_dict(torch.load(str(model_path), map_location=TORCH_DEVICE))
 
     def train_from_transitions(self, transitions, batch_size=15, num_epochs=2, batch_print_occurrence=2000, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
