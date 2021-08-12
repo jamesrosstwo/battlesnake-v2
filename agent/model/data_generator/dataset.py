@@ -22,7 +22,8 @@ class BattleSnakeDataset:
 
 
     def shuffle(self):
-        random.shuffle(self.transitions)
+        pass
+        # random.shuffle(self.transitions)
 
     def save(self, filename):
         save_path = _save_path_from_name(filename)
@@ -77,5 +78,5 @@ class BattleSnakeDataset:
             assert (game.metadata.width == width)
             assert (game.metadata.height == height)
         obj = cls(width, height, out_transitions, game_ids)
-        obj.shuffle()
+        # obj.shuffle()
         return obj

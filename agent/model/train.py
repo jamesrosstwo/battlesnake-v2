@@ -7,7 +7,7 @@ from agent.model.model import BattleSnakeConvNet
 from definitions import TORCH_DEVICE, ROOT_PATH
 
 if __name__ == "__main__":
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210812_045331_pruzze_train_size_5559")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210812_050215_pruzze_train_size_5405")
 
 
     train_test_split = 0.2
@@ -22,5 +22,5 @@ if __name__ == "__main__":
     # conv_net.train_from_transitions(train, num_epochs=10)
     conv_net.evaluate_on_transitions(test)
 
-    PATH = str(ROOT_PATH / 'agent/model/saved_models/pruzze.pth')
-    torch.save(conv_net.state_dict(), PATH)
+    # PATH = str(ROOT_PATH / 'agent/model/saved_models/pruzze.pth')
+    # torch.save(conv_net.state_dict(), PATH)
