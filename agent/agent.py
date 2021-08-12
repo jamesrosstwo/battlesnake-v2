@@ -22,7 +22,7 @@ class BattleSnakeAgent:
         parsed_board_json["turn"] = board_json["turn"]
 
         game_state = BattleSnakeGameState.from_dict(metadata, parsed_board_json, self.snake.name)
-        # _display_state_tensor(game_state.tensor, "state_img_" + str(board_json["turn"]) + ".png")
+        _display_state_tensor(game_state.tensor, "state_img_" + str(board_json["turn"]))
 
         board_tensor: torch.Tensor = torch.unsqueeze(game_state.tensor, 0)
         with torch.no_grad():

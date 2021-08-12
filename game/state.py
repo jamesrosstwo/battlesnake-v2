@@ -19,12 +19,14 @@ def _get_snakes_from_board_json(board_json):
     return [BattleSnakeSnake.from_dict(x) for x in snake_json]
 
 
-def _display_state_tensor(x, name: str="state_img.png"):
+def _display_state_tensor(x, name: str="state_img"):
     x = x.to(TORCH_DEVICE)
     img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:])).to(TORCH_DEVICE)), 0).cpu().numpy()
     img_vals = np.moveaxis(img_vals, 0, 2)
-    plt.imshow(img_vals)
-    plt.show()
+    save_pth = str(ROOT_PATH / "state_tensors"/ name)
+    np.save(save_pth, img_vals)
+    # plt.imshow(img_vals)
+    # plt.show()
 
 
 class BattleSnakeGameState:

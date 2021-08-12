@@ -19,14 +19,12 @@ class Battlesnake:
 
     def __init__(self):
         self.conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
-        dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
-        self.conv_net.train_from_transitions(dataset.transitions)
-
-
+        self.conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
+        # dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
+        # self.conv_net.train_from_transitions(dataset.transitions)
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-
     def index(self):
         rbc_blue = "#0059b3"
         rbc_gold = "#ffdd01"
@@ -82,7 +80,7 @@ if __name__ == "__main__":
     server = Battlesnake()
     cherrypy.config.update({"server.socket_host": "0.0.0.0"})
     cherrypy.config.update(
-        {"server.socket_port": int(os.environ.get("PORT", "8080")),}
+        {"server.socket_port": int(os.environ.get("PORT", "8080")), }
     )
     print("Starting Battlesnake Server...")
     cherrypy.quickstart(server)
