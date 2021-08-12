@@ -7,12 +7,14 @@ from agent.model.model import BattleSnakeConvNet
 from definitions import TORCH_DEVICE, ROOT_PATH
 
 if __name__ == "__main__":
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210812_050215_pruzze_train_size_5405")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load("20210812_051533_pruzze_train_size_5280")
 
 
     train_test_split = 0.2
-    train_test_idx = int(len(dataset.transitions) * train_test_split)
 
+    dataset.transitions.sort(key=lambda x: x.index)
+
+    train_test_idx = int(len(dataset.transitions) * train_test_split)
     test = dataset.transitions[:train_test_idx]
     train = dataset.transitions[train_test_idx:]
 

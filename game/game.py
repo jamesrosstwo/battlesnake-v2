@@ -25,6 +25,7 @@ class BattleSnakeGame:
         counts = [0 for _ in range(4)]
         out_transitions: List[BattleSnakeTransition] = []
         for idx in range(len(self.states))[:-1]:
+            print(idx)
             prev_state = self.states[idx]
             next_state = self.states[idx + 1]
             action = BattleSnakeAction.from_states(prev_state, next_state)
@@ -33,7 +34,8 @@ class BattleSnakeGame:
             out_transitions.append(BattleSnakeTransition(
                 prev_state.tensor,
                 next_state.tensor,
-                action.to_tensor()
+                action.to_tensor(),
+                idx
             ))
             counts[int(action)] += 1
         print(str(counts))
