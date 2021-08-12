@@ -5,8 +5,9 @@ import cherrypy
 
 from agent.action import BattleSnakeAction
 from agent.agent import BattleSnakeAgent
+from agent.model.data_generator.dataset import BattleSnakeDataset
 from agent.model.model import BattleSnakeConvNet
-from definitions import ROOT_PATH
+from definitions import ROOT_PATH, TORCH_DEVICE
 
 """
 This is a simple Battlesnake server written in Python.
@@ -17,8 +18,11 @@ For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python
 class Battlesnake:
 
     def __init__(self):
-        self.conv_net = BattleSnakeConvNet()
-        self.conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
+        self.conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
+        dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
+        self.conv_net.train_from_transitions(dataset.transitions)
+
+
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
