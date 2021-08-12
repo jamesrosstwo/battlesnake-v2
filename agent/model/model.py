@@ -37,10 +37,10 @@ class BattleSnakeConvNet(nn.Module):
     def load_model(self, model_path: Path):
         self.load_state_dict(torch.load(str(model_path), map_location=TORCH_DEVICE))
 
-    def train_from_transitions(self, transitions, batch_size=15, num_epochs=2, batch_print_occurrence=2000, plot=True):
+    def train_from_transitions(self, transitions, batch_size=32, num_epochs=2, batch_print_occurrence=1000, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
-        optimizer = optim.Adam(self.parameters(), lr=0.0004)
-        scheduler = scheduler = ReduceLROnPlateau(optimizer, 'min')
+        optimizer = optim.Adam(self.parameters(), lr=0.0002)
+        scheduler = ReduceLROnPlateau(optimizer, 'min')
 
         model_actions = []
         labels = []
@@ -50,7 +50,7 @@ class BattleSnakeConvNet(nn.Module):
             running_loss = 0.0
             # Iterate through data points while ensuring we don't access out of bounds
             for i in tqdm(range(len(transitions))[::batch_size][:-1]):
-                batch_data = [list(transitions[j])[1:] for j in range(i, i + batch_size)]
+                batch_data = [list(transitions[j])[1:-1] for j in range(i, i + batch_size)]
                 x, y = zip(*batch_data)
                 x = torch.stack(x, dim=0).to(TORCH_DEVICE).float()
                 y = torch.stack(y, dim=0).to(TORCH_DEVICE).float()
@@ -86,14 +86,14 @@ class BattleSnakeConvNet(nn.Module):
             fig = px.histogram(labels_df, x="action")
             fig.write_image(str(ROOT_PATH / "agent/model/log/train_action_labels_hist.png"))
 
-    def evaluate_on_transitions(self, transitions, batch_size=1):
+    def evaluate_on_transitions(self, transitions, batch_size=1, display_tensors=False):
 
         model_actions = []
         labels = []
         test = transitions
         correct_count, all_count = 0, 0
         for i in tqdm(range(len(test))[::batch_size][:-1]):
-            batch_data = [list(transitions[j])[1:] for j in range(i, i + batch_size)]
+            batch_data = [list(transitions[j])[1:-1] for j in range(i, i + batch_size)]
             x, y = zip(*batch_data)
             x = torch.stack(x, dim=0).to(TORCH_DEVICE).float()
             y = torch.stack(y, dim=0).to(TORCH_DEVICE).float()
@@ -104,7 +104,9 @@ class BattleSnakeConvNet(nn.Module):
                 logps = self(x)
             ps = torch.exp(logps)
             model_actions.extend([x.argmax() for x in ps.cpu().numpy()])
-            _display_state_tensor(x[0])
+            if display_tensors:
+                _display_state_tensor(x[0])
+                print(ps, y_class_idx)
             for i in range(len(ps)):
                 if ps[i].argmax() == y_class_idx[i]:
                     correct_count += 1

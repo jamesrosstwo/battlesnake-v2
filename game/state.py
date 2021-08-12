@@ -1,4 +1,5 @@
 import json
+import pickle
 from typing import List
 
 import numpy as np
@@ -6,7 +7,7 @@ import matplotlib.pyplot as plt
 import torch
 from torchvision import transforms
 
-from definitions import TORCH_DEVICE
+from definitions import TORCH_DEVICE, ROOT_PATH
 from game.cell import BattleSnakeCell, BattleSnakeCellType
 from game.metadata import BattleSnakeGameMetadata
 from game.snake import BattleSnakeSnake
@@ -18,7 +19,7 @@ def _get_snakes_from_board_json(board_json):
     return [BattleSnakeSnake.from_dict(x) for x in snake_json]
 
 
-def _display_state_tensor(x):
+def _display_state_tensor(x, name: str="state_img.png"):
     x = x.to(TORCH_DEVICE)
     img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:])).to(TORCH_DEVICE)), 0).cpu().numpy()
     img_vals = np.moveaxis(img_vals, 0, 2)
