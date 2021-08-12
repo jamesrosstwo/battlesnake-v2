@@ -19,7 +19,8 @@ def _get_snakes_from_board_json(board_json):
 
 
 def _display_state_tensor(x):
-    img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:]))), 0).numpy()
+    x = x.to(TORCH_DEVICE)
+    img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:])).to(TORCH_DEVICE)), 0).cpu().numpy()
     img_vals = np.moveaxis(img_vals, 0, 2)
     plt.imshow(img_vals)
     plt.show()

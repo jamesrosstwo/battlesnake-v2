@@ -32,13 +32,13 @@ class BattleSnakeDataset:
     def load(cls, filename):
         save_path = _save_path_from_name(filename)
         obj = pickle.load(open(save_path, "rb"))
-        obj.shuffle()
+        # obj.shuffle()
         return obj
 
     @classmethod
     def load_direct(cls, file_path):
         obj = pickle.load(open(file_path, "rb"))
-        obj.shuffle()
+        # obj.shuffle()
         # t: BattleSnakeTransition = obj.transitions[0]
         # _display_state_tensor(t.prev_state)
         # _display_state_tensor(t.next_state)
@@ -62,7 +62,7 @@ class BattleSnakeDataset:
             out_game_ids.extend(d.game_ids)
 
         obj = cls(w, h, out_transitions, out_game_ids)
-        obj.shuffle()
+        # obj.shuffle()
         return obj
 
     @classmethod

@@ -11,7 +11,7 @@ import plotly.express as px
 
 from agent.action import BattleSnakeAction
 from definitions import TORCH_DEVICE, ROOT_PATH
-from game.state import BattleSnakeGameState
+from game.state import BattleSnakeGameState, _display_state_tensor
 
 
 class BattleSnakeConvNet(nn.Module):
@@ -86,7 +86,7 @@ class BattleSnakeConvNet(nn.Module):
             fig = px.histogram(labels_df, x="action")
             fig.write_image(str(ROOT_PATH / "agent/model/log/train_action_labels_hist.png"))
 
-    def evaluate_on_transitions(self, transitions, batch_size=4):
+    def evaluate_on_transitions(self, transitions, batch_size=1):
 
         model_actions = []
         labels = []
@@ -104,6 +104,7 @@ class BattleSnakeConvNet(nn.Module):
                 logps = self(x)
             ps = torch.exp(logps)
             model_actions.extend([x.argmax() for x in ps.cpu().numpy()])
+            _display_state_tensor(x[0])
             for i in range(len(ps)):
                 if ps[i].argmax() == y_class_idx[i]:
                     correct_count += 1
