@@ -19,10 +19,10 @@ class BattleSnakeConvNet(nn.Module):
         state_n_cs = BattleSnakeGameState.NUM_CHANNELS
 
         super().__init__()
-        self.conv1 = nn.Conv2d(in_channels=state_n_cs, out_channels=state_n_cs * 2, kernel_size=(3, 3))
-        self.conv2 = nn.Conv2d(in_channels=state_n_cs * 2, out_channels=state_n_cs * 4, kernel_size=(2, 2))
-        self.fc1 = nn.Linear(2592, 1024)
-        self.fc2 = nn.Linear(1024, 120)
+        self.conv1 = nn.Conv2d(in_channels=state_n_cs, out_channels=state_n_cs * 3, kernel_size=(5, 5))
+        self.conv2 = nn.Conv2d(in_channels=state_n_cs * 3, out_channels=state_n_cs * 5, kernel_size=(3, 3))
+        self.fc1 = nn.Linear(3375, 1524)
+        self.fc2 = nn.Linear(1524, 120)
         self.fc3 = nn.Linear(120, len(BattleSnakeAction))
 
     def forward(self, x):
@@ -37,9 +37,9 @@ class BattleSnakeConvNet(nn.Module):
     def load_model(self, model_path: Path):
         self.load_state_dict(torch.load(str(model_path), map_location=TORCH_DEVICE))
 
-    def train_from_transitions(self, transitions, batch_size=32, num_epochs=2, batch_print_occurrence=1000, plot=True):
+    def train_from_transitions(self, transitions, batch_size=20, num_epochs=2, batch_print_occurrence=1000, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
-        optimizer = optim.Adam(self.parameters(), lr=0.0002)
+        optimizer = optim.Adam(self.parameters(), lr=0.00008, weight_decay=0.025)
         scheduler = ReduceLROnPlateau(optimizer, 'min')
 
         model_actions = []
@@ -86,7 +86,7 @@ class BattleSnakeConvNet(nn.Module):
             fig = px.histogram(labels_df, x="action")
             fig.write_image(str(ROOT_PATH / "agent/model/log/train_action_labels_hist.png"))
 
-    def evaluate_on_transitions(self, transitions, batch_size=32, display_tensors=False):
+    def evaluate_on_transitions(self, transitions, batch_size=100, display_tensors=False):
 
         model_actions = []
         labels = []

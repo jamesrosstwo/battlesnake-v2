@@ -9,6 +9,7 @@ class BattleSnakeCellType(IntEnum):
     EMPTY = 0
     FOOD = 1
     DANGER = 2
+    WALL = 3
 
 
 class BattleSnakeCell:

@@ -22,12 +22,12 @@ def _get_snakes_from_board_json(board_json):
 def _display_state_tensor(x, name: str="state_img"):
     x = x.to(TORCH_DEVICE)
     save_pth = str(ROOT_PATH / "state_tensors" / name)
-    np.save(save_pth, x.cpu().numpy())
-    img_vals = torch.cat((x, torch.zeros((1, *x.shape[1:])).to(TORCH_DEVICE)), 0).cpu().numpy()
+    img_vals = x.cpu().numpy()
+    # np.save(save_pth, img_vals)
     img_vals = np.moveaxis(img_vals, 0, 2)
 
-    # plt.imshow(img_vals)
-    # plt.show()
+    plt.imshow(img_vals)
+    plt.show()
 
 
 class BattleSnakeGameState:
@@ -82,10 +82,10 @@ class BattleSnakeGameState:
         ndarr: np.ndarray = np.zeros((BattleSnakeGameState.NUM_CHANNELS, t_w, t_h))
 
 
-        # Fill with danger to get board bounds
+        # Fill with wall to get board bounds
         for x in range(t_w):
             for y in range(t_h):
-                ndarr[:, x, y] = BattleSnakeCell(x, y, BattleSnakeCellType.DANGER).encode()
+                ndarr[:, x, y] = BattleSnakeCell(x, y, BattleSnakeCellType.WALL).encode()
         for x in range(self._height):
             for y in range(self._width):
                 ndarr[:, x, y] = self.local_cells[x][y].encode()
@@ -93,7 +93,6 @@ class BattleSnakeGameState:
         # Center view around player
         board_center = (t_w // 2, t_h // 2)
         center_shift = (board_center[0] - self.our_snake.head_pos.x, board_center[1] - self.our_snake.head_pos.y)
-        # _display_state_tensor(torch.from_numpy(ndarr).float())
         centered_input = np.roll(ndarr, center_shift, (1, 2))
         tensor = torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
         # _display_state_tensor(tensor)

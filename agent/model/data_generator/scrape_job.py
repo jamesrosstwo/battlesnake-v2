@@ -6,7 +6,7 @@ from agent.model.data_generator.dataset import BattleSnakeDataset
 from agent.model.data_generator.scraper import BattleSnakeScraper
 
 
-seen_games: set = {}
+seen_games = set()
 def scrape_pruzze():
     pruzze_url = "https://play.battlesnake.com/u/pruzze/pruzze-v2/"
 
