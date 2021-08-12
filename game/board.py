@@ -46,7 +46,7 @@ class BattleSnakeBoard:
     def _add_danger(self, board_json):
         for snake in board_json["board"]["snakes"]:
             for body_seg in snake["body"]:
-                self._set_cell(body_seg["x"], body_seg["y"], BattleSnakeCellType.DANGER)
+                self._set_cell(body_seg["x"], body_seg["y"], BattleSnakeCellType.SNAKE)
 
     def _add_heads(self, board_json):
         for snake in self.snakes:
@@ -56,7 +56,7 @@ class BattleSnakeBoard:
                 self._set_cell(snake.head_pos.x, snake.head_pos.y, BattleSnakeCellType.EMPTY)
             else:
                 for cell in self._diag_neighbours(snake.head_pos):
-                    self._set_cell(cell.x, cell.y, BattleSnakeCellType.DANGER)
+                    self._set_cell(cell.x, cell.y, BattleSnakeCellType.SNAKE)
 
     def _is_valid(self, pos: BoardCoord):
         return 0 <= pos.x < self.width and 0 <= pos.y < self.height
@@ -64,13 +64,13 @@ class BattleSnakeBoard:
     def _is_safe(self, pos: BoardCoord):
         if not self._is_valid(pos):
             return False
-        return self.get_cell_from_coord(pos).type != BattleSnakeCellType.DANGER
+        return self.get_cell_from_coord(pos).type != BattleSnakeCellType.SNAKE
 
     def _is_extra_safe(self, pos: BoardCoord):
         if not self._is_safe(pos):
             return False
         adj_safe = [x for x in self._diag_neighbours(pos) if
-                    self.get_cell_from_coord(x).type != BattleSnakeCellType.DANGER]
+                    self.get_cell_from_coord(x).type != BattleSnakeCellType.SNAKE]
         return len(adj_safe) >= 3  # Our previous body segment is danger, so only look for three
 
     def _safe_neighbours(self, pos: BoardCoord) -> List[BoardCoord]:
@@ -138,7 +138,7 @@ class BattleSnakeBoard:
 
     def print_board(self):
         cell_symbols = {
-            BattleSnakeCellType.DANGER: "D",
+            BattleSnakeCellType.SNAKE: "D",
             BattleSnakeCellType.FOOD: "F",
             BattleSnakeCellType.EMPTY: "."
         }

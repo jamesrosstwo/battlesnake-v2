@@ -8,17 +8,18 @@ from game.coord import BoardCoord
 class BattleSnakeCellType(IntEnum):
     EMPTY = 0
     FOOD = 1
-    DANGER = 2
+    SNAKE = 2
     WALL = 3
 
 
 class BattleSnakeCell:
     CELL_DIMS = len(BattleSnakeCellType) - 1
 
-    def __init__(self, x, y, type: BattleSnakeCellType):
+    def __init__(self, x, y, type: BattleSnakeCellType, value: float=1):
         self.x = x
         self.y = y
         self.type = type
+        self.value = value
 
     def get_pos(self):
         return BoardCoord(self.x, self.y)
@@ -32,5 +33,5 @@ class BattleSnakeCell:
         vec = np.zeros(BattleSnakeCell.CELL_DIMS)
         int_t = int(self.type)
         if int_t > 0:
-            vec[int(self.type) - 1] = 1
+            vec[int(self.type) - 1] = self.value
         return vec

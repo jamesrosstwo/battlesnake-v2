@@ -39,7 +39,7 @@ class BattleSnakeConvNet(nn.Module):
 
     def train_from_transitions(self, transitions, batch_size=20, num_epochs=2, batch_print_occurrence=1000, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
-        optimizer = optim.Adam(self.parameters(), lr=0.00008, weight_decay=0.025)
+        optimizer = optim.Adam(self.parameters(), lr=0.00013, weight_decay=0.01)
         scheduler = ReduceLROnPlateau(optimizer, 'min')
 
         model_actions = []

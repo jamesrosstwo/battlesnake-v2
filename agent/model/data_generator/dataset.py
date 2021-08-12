@@ -22,8 +22,7 @@ class BattleSnakeDataset:
 
 
     def shuffle(self):
-        pass
-        # random.shuffle(self.transitions)
+        random.shuffle(self.transitions)
 
     def save(self, filename):
         save_path = _save_path_from_name(filename)
@@ -73,10 +72,12 @@ class BattleSnakeDataset:
         width = games[0].metadata.width
         height = games[0].metadata.height
         game_ids = [x.metadata.id for x in games]
+        raw_games = [games[0].raw_json]
         for game in games[1:]:
             out_transitions.extend(game.transitions)
+            raw_games.append(game.raw_json)
             assert (game.metadata.width == width)
             assert (game.metadata.height == height)
         obj = cls(width, height, out_transitions, game_ids)
         # obj.shuffle()
-        return obj
+        return raw_games, obj

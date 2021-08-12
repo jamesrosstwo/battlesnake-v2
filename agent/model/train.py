@@ -8,11 +8,11 @@ from definitions import TORCH_DEVICE, ROOT_PATH
 
 if __name__ == "__main__":
     # dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load_direct(ROOT_PATH / "data/20210812_143237_pruzze_train_size_6070.pickle")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/")
 
     train_test_split = 0.2
 
-    dataset.transitions.sort(key=lambda x: x.index)
+    dataset.shuffle()
 
     train_test_idx = int(len(dataset.transitions) * train_test_split)
     test = dataset.transitions[:train_test_idx]

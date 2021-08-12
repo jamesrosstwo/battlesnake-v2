@@ -4,7 +4,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 from agent.model.data_generator.dataset import BattleSnakeDataset
 from agent.model.data_generator.scraper import BattleSnakeScraper
-
+from definitions import ROOT_PATH, SETTINGS
 
 seen_games = set()
 def scrape_pruzze():
@@ -26,11 +26,13 @@ def scrape_pruzze():
 
     print("found new games:", [game.metadata.id for game in new_games])
 
-    dataset = BattleSnakeDataset.from_games(new_games)
+    raw_turns, dataset = BattleSnakeDataset.from_games(pruzze_games)
 
     file_name = time.strftime("%Y%m%d_%H%M%S") + "_pruzze_train_size_" + str(len(dataset.transitions))
 
     dataset.save(file_name)
+    with open(str(ROOT_PATH / SETTINGS["data"]["raw_data_path"] / file_name) + ".txt", "w") as f:
+        f.writelines(raw_turns)
 
 scrape_pruzze()
 scheduler = BlockingScheduler()

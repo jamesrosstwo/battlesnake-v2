@@ -1,2 +1,3 @@
 data:
-  path: "data/"
+  path: "data/datasets"
+  raw_data_path: "data/raw"
