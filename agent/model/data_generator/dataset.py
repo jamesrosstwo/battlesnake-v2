@@ -6,6 +6,7 @@ import pickle
 from agent.model.data_generator.transition import BattleSnakeTransition
 from definitions import SETTINGS, ROOT_PATH
 from game.game import BattleSnakeGame
+from game.state import _display_state_tensor
 
 
 def _save_path_from_name(filename):
@@ -32,6 +33,15 @@ class BattleSnakeDataset:
         save_path = _save_path_from_name(filename)
         obj = pickle.load(open(save_path, "rb"))
         obj.shuffle()
+        return obj
+
+    @classmethod
+    def load_direct(cls, file_path):
+        obj = pickle.load(open(file_path, "rb"))
+        obj.shuffle()
+        # t: BattleSnakeTransition = obj.transitions[0]
+        # _display_state_tensor(t.prev_state)
+        # _display_state_tensor(t.next_state)
         return obj
 
     @classmethod

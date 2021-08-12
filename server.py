@@ -18,7 +18,7 @@ class Battlesnake:
 
     def __init__(self):
         self.conv_net = BattleSnakeConvNet()
-        # self.conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
+        self.conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze_old.pth")
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
