@@ -86,7 +86,7 @@ class BattleSnakeConvNet(nn.Module):
             fig = px.histogram(labels_df, x="action")
             fig.write_image(str(ROOT_PATH / "agent/model/log/train_action_labels_hist.png"))
 
-    def evaluate_on_transitions(self, transitions, batch_size=1, display_tensors=False):
+    def evaluate_on_transitions(self, transitions, batch_size=32, display_tensors=False):
 
         model_actions = []
         labels = []

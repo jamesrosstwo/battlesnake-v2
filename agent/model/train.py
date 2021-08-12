@@ -19,15 +19,15 @@ if __name__ == "__main__":
     train = dataset.transitions[train_test_idx:]
 
     conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
-    conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
+    # conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
 
-    # conv_net.train_from_transitions(train, num_epochs=10)
+    conv_net.train_from_transitions(train, num_epochs=10)
     conv_net.evaluate_on_transitions(train)
     conv_net.evaluate_on_transitions(test)
 
     new_transitions = BattleSnakeDataset.load("single_game_test").transitions
 
-    conv_net.evaluate_on_transitions(new_transitions, display_tensors=True)
+    conv_net.evaluate_on_transitions(new_transitions)
 
 
     PATH = str(ROOT_PATH / 'agent/model/saved_models/pruzze.pth')
