@@ -8,7 +8,7 @@ from definitions import TORCH_DEVICE, ROOT_PATH
 
 if __name__ == "__main__":
     # dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load_direct(ROOT_PATH / "data/datasets/20210812_172636_pruzze_train_size_7102.pickle")
 
     train_test_split = 0.2
 

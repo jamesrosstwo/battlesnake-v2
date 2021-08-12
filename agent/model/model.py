@@ -21,7 +21,7 @@ class BattleSnakeConvNet(nn.Module):
         super().__init__()
         self.conv1 = nn.Conv2d(in_channels=state_n_cs, out_channels=state_n_cs * 3, kernel_size=(5, 5))
         self.conv2 = nn.Conv2d(in_channels=state_n_cs * 3, out_channels=state_n_cs * 5, kernel_size=(3, 3))
-        self.fc1 = nn.Linear(3375, 1524)
+        self.fc1 = nn.Linear(4500, 1524)
         self.fc2 = nn.Linear(1524, 120)
         self.fc3 = nn.Linear(120, len(BattleSnakeAction))
 
@@ -39,7 +39,7 @@ class BattleSnakeConvNet(nn.Module):
 
     def train_from_transitions(self, transitions, batch_size=20, num_epochs=2, batch_print_occurrence=1000, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
-        optimizer = optim.Adam(self.parameters(), lr=0.00013, weight_decay=0.01)
+        optimizer = optim.Adam(self.parameters(), lr=0.00013, weight_decay=0.008)
         scheduler = ReduceLROnPlateau(optimizer, 'min')
 
         model_actions = []

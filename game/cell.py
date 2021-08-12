@@ -9,7 +9,8 @@ class BattleSnakeCellType(IntEnum):
     EMPTY = 0
     FOOD = 1
     SNAKE = 2
-    WALL = 3
+    SNAKE_HEAD = 3
+    WALL = 4
 
 
 class BattleSnakeCell:

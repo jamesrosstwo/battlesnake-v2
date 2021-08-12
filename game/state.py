@@ -20,13 +20,13 @@ def _get_snakes_from_board_json(board_json):
 
 
 def _display_state_tensor(x, name: str = "state_img"):
-    x = x.to(TORCH_DEVICE)
+    x = x.to(TORCH_DEVICE).cpu().numpy()
     save_pth = str(ROOT_PATH / "state_tensors" / name)
-    img_vals = (x.cpu().numpy() / 2) + 0.5
+    img_vals = (x / 2) + 0.5
     # np.save(save_pth, img_vals)
     img_vals = np.moveaxis(img_vals, 0, 2)
 
-    plt.imshow(img_vals)
+    plt.imshow(img_vals, cmap="rgba")
     plt.show()
 
 
@@ -76,6 +76,8 @@ class BattleSnakeGameState:
                 if idx == 0:
                     d = len(snake["body"]) - our_snake.length
                     cells[seg_x][seg_y].value = np.tanh((d + 1) / 2)
+                else:
+                    cells[seg_x][seg_y].set_type(BattleSnakeCellType.SNAKE_HEAD)
 
         return cls(cells, metadata.width, metadata.height, turn_num, our_snake)
 
@@ -99,8 +101,8 @@ class BattleSnakeGameState:
         center_shift = (board_center[0] - self.our_snake.head_pos.x, board_center[1] - self.our_snake.head_pos.y)
         centered_input = np.roll(ndarr, center_shift, (1, 2))
         tensor = torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
-        means = (0.5, 0, 0.5)
-        stds = (0.5, 1, 0.5)
+        means = (0.5, 0.5, 0, 0.5)
+        stds = (0.5, 0.5, 1, 0.5)
         normalized = transforms.Normalize(means, stds)(tensor)
         # _display_state_tensor(normalized)
         return normalized
