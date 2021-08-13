@@ -26,9 +26,8 @@ class Battlesnake:
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def index(self):
-        rbc_blue = "#0059b3"
-        rbc_gold = "#ffdd01"
-        color = random.choice([rbc_gold, rbc_blue])
+        rbc_blue = "#0059b4"
+        color = rbc_blue
         # This function is called when you register your Battlesnake on play.battlesnake.com
         # It controls your Battlesnake appearance and author permissions.
         # TIP: If you open your Battlesnake URL in browser you should see this data_generator
@@ -36,8 +35,8 @@ class Battlesnake:
             "apiversion": "1",
             "author": "",  # TODO: Your Battlesnake Username
             "color": color,  # TODO: Personalize
-            "head": "fang",  # TODO: Personalize
-            "tail": "curled",  # TODO: Personalize
+            "head": "shades",  # TODO: Personalize
+            "tail": "sharp",  # TODO: Personalize
         }
 
     @cherrypy.expose

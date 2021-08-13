@@ -22,30 +22,35 @@ class BattleSnakeConvNet(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=state_n_cs, out_channels=state_n_cs * 4, kernel_size=(5, 5))
         self.conv2 = nn.Conv2d(in_channels=state_n_cs * 4, out_channels=state_n_cs * 8, kernel_size=(3, 3))
         self.fc1 = nn.Linear(7200, 1000)
-        self.fc2 = nn.Linear(1000, 120)
-        self.fc3 = nn.Linear(120, len(BattleSnakeAction))
+        self.fc2 = nn.Linear(1000, 1000)
+        self.fc3 = nn.Linear(1000, 120)
+        self.fc4 = nn.Linear(120, len(BattleSnakeAction))
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
-        x = F.dropout(x, p=0.4)
+        x = F.dropout(x, p=0.55)
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = F.dropout(x, p=0.5)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return x
 
     def load_model(self, model_path: Path):
         self.load_state_dict(torch.load(str(model_path), map_location=TORCH_DEVICE))
 
-    def train_from_transitions(self, transitions, batch_size=100, num_epochs=2, batch_print_occurrence=1000, plot=True):
+    def train_from_transitions(self, transitions, validation_transitions, batch_size=256, num_epochs=2, plot=True):
         criterion = nn.CrossEntropyLoss().to(TORCH_DEVICE)
-        optimizer = optim.Adam(self.parameters(), lr=0.0001, weight_decay=0.004)
-        scheduler = ReduceLROnPlateau(optimizer, 'min')
+        # optimizer = optim.Adam(self.parameters(), lr=0.0001, weight_decay=0.004)
+        optimizer = optim.SGD(self.parameters(), lr=0.003, momentum=0.9, weight_decay=0.0015)
+        scheduler = ReduceLROnPlateau(optimizer, 'min', patience=4)
 
         model_actions = []
         labels = []
         losses = []
+        validation_acc = []
         for epoch in range(num_epochs):
             print("Epoch", epoch)
             running_loss = 0.0
@@ -66,18 +71,21 @@ class BattleSnakeConvNet(nn.Module):
                 loss.backward()
                 optimizer.step()
                 running_loss += loss.item()
-                if i % batch_print_occurrence == 0 and i > 0:
-                    batch_eval_loss = running_loss / batch_print_occurrence
-                    print('[%d, %5d] loss: %.5f' %
-                          (epoch + 1, i + 1, batch_eval_loss))
-                    losses.append(batch_eval_loss)
-                    scheduler.step(batch_eval_loss)
-                    running_loss = 0.0
+            batch_eval_loss = running_loss * batch_size
+            print('[%d] loss: %.5f' % (epoch + 1, batch_eval_loss))
+            losses.append(batch_eval_loss)
+            scheduler.step(batch_eval_loss)
+            validation_acc.append(self.evaluate_on_transitions(validation_transitions))
+
 
         if plot:
             loss_df = pd.DataFrame(list(enumerate(losses)), columns=["idx", "loss"])
             fig = px.line(loss_df, x="idx", y="loss")
             fig.write_image(str(ROOT_PATH / "agent/model/log/loss_graph.png"))
+
+            valid_df = pd.DataFrame(list(enumerate(validation_acc)), columns=["idx", "validation_acc"])
+            fig = px.line(valid_df, x="idx", y="validation_acc")
+            fig.write_image(str(ROOT_PATH / "agent/model/log/validation_acc_graph.png"))
 
             outputs_df = pd.DataFrame([(x) for x in model_actions], columns=["action"])
             fig = px.histogram(outputs_df, x="action")
@@ -123,3 +131,5 @@ class BattleSnakeConvNet(nn.Module):
         labels_df = pd.DataFrame([(x) for x in labels], columns=["action"])
         fig = px.histogram(labels_df, x="action")
         fig.write_image(str(ROOT_PATH / "agent/model/log/test_action_labels_hist.png"))
+
+        return (correct_count / all_count)

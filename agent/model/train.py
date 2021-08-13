@@ -21,7 +21,7 @@ if __name__ == "__main__":
     conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
     # conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
 
-    conv_net.train_from_transitions(train, num_epochs=50)
+    conv_net.train_from_transitions(train, test, num_epochs=50)
     conv_net.evaluate_on_transitions(train)
     conv_net.evaluate_on_transitions(test)
 
