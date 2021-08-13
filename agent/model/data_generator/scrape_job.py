@@ -26,7 +26,7 @@ def scrape_pruzze():
 
     print("found new games:", [game.metadata.id for game in new_games])
 
-    raw_turns, dataset = BattleSnakeDataset.from_games(pruzze_games)
+    raw_turns, dataset = BattleSnakeDataset.from_games(new_games)
 
     file_name = time.strftime("%Y%m%d_%H%M%S") + "_pruzze_train_size_" + str(len(dataset.transitions))
 

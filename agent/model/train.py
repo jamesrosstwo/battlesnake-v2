@@ -8,7 +8,7 @@ from definitions import TORCH_DEVICE, ROOT_PATH
 
 if __name__ == "__main__":
     # dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/pruzze")
-    dataset: BattleSnakeDataset = BattleSnakeDataset.load_direct(ROOT_PATH / "data/datasets/20210812_172636_pruzze_train_size_7102.pickle")
+    dataset: BattleSnakeDataset = BattleSnakeDataset.load_dir(ROOT_PATH / "data/datasets/")
 
     train_test_split = 0.2
 
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     conv_net = BattleSnakeConvNet().to(TORCH_DEVICE)
     # conv_net.load_model(ROOT_PATH / "agent/model/saved_models/pruzze.pth")
 
-    conv_net.train_from_transitions(train, num_epochs=30)
+    conv_net.train_from_transitions(train, num_epochs=50)
     conv_net.evaluate_on_transitions(train)
     conv_net.evaluate_on_transitions(test)
 

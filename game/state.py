@@ -26,7 +26,7 @@ def _display_state_tensor(x, name: str = "state_img"):
     # np.save(save_pth, img_vals)
     img_vals = np.moveaxis(img_vals, 0, 2)
 
-    plt.imshow(img_vals, cmap="rgba")
+    plt.imshow(img_vals[::2])
     plt.show()
 
 
@@ -75,7 +75,7 @@ class BattleSnakeGameState:
                 cells[seg_x][seg_y].set_type(BattleSnakeCellType.SNAKE)
                 if idx == 0:
                     d = len(snake["body"]) - our_snake.length
-                    cells[seg_x][seg_y].value = np.tanh((d + 1) / 2)
+                    cells[seg_x][seg_y].value = int(d >= 0)
                 else:
                     cells[seg_x][seg_y].set_type(BattleSnakeCellType.SNAKE_HEAD)
 
@@ -101,8 +101,8 @@ class BattleSnakeGameState:
         center_shift = (board_center[0] - self.our_snake.head_pos.x, board_center[1] - self.our_snake.head_pos.y)
         centered_input = np.roll(ndarr, center_shift, (1, 2))
         tensor = torch.from_numpy(centered_input).float().to(TORCH_DEVICE)
-        means = (0.5, 0.5, 0, 0.5)
-        stds = (0.5, 0.5, 1, 0.5)
+        means = (0.5, 0.5, 0.5, 0.5)
+        stds = (0.5, 0.5, 0.5, 0.5)
         normalized = transforms.Normalize(means, stds)(tensor)
         # _display_state_tensor(normalized)
         return normalized
