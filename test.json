@@ -1,0 +1,80 @@
+{
+  'game': {
+    'id': 'de94a187-f7a3-4248-95c7-f2f0e1cc7f2b',
+    'ruleset': {
+      'name': 'solo',
+      'version': 'v1.0.17'
+    },
+    'timeout': 500
+  },
+  'turn': 1,
+  'board': {
+    'height': 11,
+    'width': 11,
+    'snakes': [
+      {
+        'id': 'gs_rbctc8VPmQCt9RptCXhBv9hV',
+        'name': 'DOSnake',
+        'latency': '47',
+        'health': 99,
+        'body': [
+          {
+            'x': 9,
+            'y': 10
+          },
+          {
+            'x': 9,
+            'y': 9
+          },
+          {
+            'x': 9,
+            'y': 9
+          }
+        ],
+        'head': {
+          'x': 9,
+          'y': 10
+        },
+        'length': 3,
+        'shout': ''
+      }
+    ],
+    'food': [
+      {
+        'x': 8,
+        'y': 8
+      },
+      {
+        'x': 5,
+        'y': 5
+      }
+    ],
+    'hazards': []
+  },
+  'you': {
+    'id': 'gs_rbctc8VPmQCt9RptCXhBv9hV',
+    'name': 'DOSnake',
+    'latency': '47',
+    'health': 99,
+    'body': [
+      {
+        'x': 9,
+        'y': 10
+      },
+      {
+        'x': 9,
+        'y': 9
+      },
+      {
+        'x': 9,
+        'y': 9
+      }
+    ],
+    'head': {
+      'x': 9,
+      'y': 10
+    },
+    'length': 3,
+    'shout': ''
+  }
+}
